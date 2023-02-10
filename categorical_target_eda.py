@@ -157,7 +157,6 @@ def histogram_jam(X, num_cols, labels_dict):
     Returns nothing.
     """
     try: 
-        counter = 0
         # itterate to make all the histograms for each column in the dependant variables that are numeric columns:
         # make a histogram and label them in 'Title Case' from 'snake_case' 
         for col in X[num_cols]:
@@ -167,7 +166,6 @@ def histogram_jam(X, num_cols, labels_dict):
             distributions.set_xlabel(f'{labels_dict[col]}')
             plt.xticks(rotation = 45)
 
-            counter += 1;
     except Exception as e_7:
            print('ERROR at histogram_jam', {e_7})
 
@@ -222,8 +220,8 @@ def viz_numeric_vars_to_target(pivot_table, labels_dict, target_column):
         # itterate to show relationships between the target and numeric dependant variables
         # for each column in the pivot table, make a barplot with the target outcome on the x axis
         # and the numeric feature on the y axis and make sure the plots are properly labeled with 'Title Case' labels
-        counter = 0
-        for index, col in enumerate(pivot_table.columns,start=1):
+
+        for col in pivot_table.columns:
             fig, ax = plt.subplots()
             figure = sns.barplot(data = pivot_table,
                                  x = pivot_table.index,
@@ -234,8 +232,6 @@ def viz_numeric_vars_to_target(pivot_table, labels_dict, target_column):
             figure.set_xlabel(target_column.replace("_", " ").title())
             plt.xticks(rotation = 45)
 
-            #    plt.savefig(f"{title_labels[counter]}")
-            counter += 1;
         
     except Exception as e_9:
         print('ERROR at viz_numeric_vars_to_target', {e_9})
@@ -269,9 +265,9 @@ def output_viz(X, y, num_cols, target_column):
         # deploying histogram_jam and saving the output to 'histograms' 
         # deploying pivot_table_mean and saving the output as 'pivot_table' 
         # deploying viz_vars_to_target and saving the the output as viz_vars_to_target
-        histograms = histogram_jam(X, num_cols, labels_dict)
+        histogram_jam(X, num_cols, labels_dict)
         pivot_table = pivot_table_mean(X, num_cols, y, target_column)
-        viz_vars_to_target = viz_numeric_vars_to_target(pivot_table, labels_dict, target_column)
+        viz_numeric_vars_to_target(pivot_table, labels_dict, target_column)
         
     except Exception as e_10:
         print('ERROR at output_viz', {e_10})
@@ -320,7 +316,7 @@ def deploy_categorical_target_EDA():
         X, y, target_column = select_target(df)
         num_cols = select_numeric_cols(X)
         cat_cols = select_cat_cols(X)
-        other_output = output_viz(X, y, num_cols, target_column)
+        output_viz(X, y, num_cols, target_column)
 
         # saving the df as a return from this function so the user can continue on with their 
         # process without having to go back and redo and work 
